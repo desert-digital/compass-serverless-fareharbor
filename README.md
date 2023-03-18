@@ -1,2 +1,2 @@
-# compass-serverless-fareharbor
+# fareharbor
 Compass Serverless Fareharbor
