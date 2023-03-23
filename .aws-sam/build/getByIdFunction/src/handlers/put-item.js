@@ -1,8 +1,7 @@
 // Create clients and set shared const values outside of the handler.
 
 // Create a DocumentClient that represents the query to add an item
-const dynamodb = require('aws-sdk/clients/dynamodb');
-const docClient = new dynamodb.DocumentClient();
+const AWS = require('aws-sdk');
 
 // Get the DynamoDB table name from environment variables
 const tableName = process.env.SAMPLE_TABLE;
@@ -11,16 +10,30 @@ const tableName = process.env.SAMPLE_TABLE;
  * A simple example includes a HTTP post method to add one item to a DynamoDB table.
  */
 exports.putItemHandler = async (event) => {
+    console.info('New version');
+
+    AWS.config.update({region: 'us-west-1'});
+    const docClient = new AWS.DynamoDB.DocumentClient();
+
+
     if (event.httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
     }
     // All log statements are written to CloudWatch
-    console.info('received:', event);
 
     // Get id and name from the body of the request
     const body = JSON.parse(event.body);
-    const id = body.id;
-    const name = body.name;
+    const id = body.booking.pk;
+    const start = body.booking.availability.start_at;
+    const end = body.booking.availability.end_at;
+    const booking = body.booking;
+
+    const pk = id.toString();
+
+    console.info('id: ', pk);
+    console.info('start: ', start);
+    console.info('end: ', end);
+    console.info('booking: ', booking);
 
     // Creates a new item, or replaces an old item with a new item
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
@@ -29,7 +42,7 @@ exports.putItemHandler = async (event) => {
     try {
         const params = {
             TableName : tableName,
-            Item: { id : id, name: name }
+            Item: { id : pk, start: start, end: end, booking: booking }
         };
     
         const result = await docClient.put(params).promise();
@@ -41,7 +54,7 @@ exports.putItemHandler = async (event) => {
     } catch (ResourceNotFoundException) {
         response = {
             statusCode: 404,
-            body: "Unable to call DynamoDB. Table resource not found."
+            body: "Unable to call DynamoDB. Table resource not found. " + ResourceNotFoundException
         };
     }
 
