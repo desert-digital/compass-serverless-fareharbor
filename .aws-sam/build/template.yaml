@@ -8,62 +8,6 @@ Globals:
   Api:
     TracingEnabled: true
 Resources:
-  getAllItemsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: src/handlers/get-all-items.getAllItemsHandler
-      Runtime: nodejs16.x
-      Architectures:
-      - x86_64
-      MemorySize: 128
-      Timeout: 100
-      Description: A simple example includes a HTTP get method to get all items from
-        a DynamoDB table.
-      Policies:
-      - DynamoDBCrudPolicy:
-          TableName:
-            Ref: SampleTable
-      Environment:
-        Variables:
-          SAMPLE_TABLE:
-            Ref: SampleTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /
-            Method: GET
-      CodeUri: getAllItemsFunction
-    Metadata:
-      SamResourceId: getAllItemsFunction
-  getByIdFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: src/handlers/get-by-id.getByIdHandler
-      Runtime: nodejs16.x
-      Architectures:
-      - x86_64
-      MemorySize: 128
-      Timeout: 100
-      Description: A simple example includes a HTTP get method to get one item by
-        id from a DynamoDB table.
-      Policies:
-      - DynamoDBCrudPolicy:
-          TableName:
-            Ref: SampleTable
-      Environment:
-        Variables:
-          SAMPLE_TABLE:
-            Ref: SampleTable
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /{id}
-            Method: GET
-      CodeUri: getByIdFunction
-    Metadata:
-      SamResourceId: getByIdFunction
   putItemFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -73,16 +17,15 @@ Resources:
       - x86_64
       MemorySize: 128
       Timeout: 100
-      Description: A simple example includes a HTTP post method to add one item to
-        a DynamoDB table.
+      Description: Fareharbor events table.
       Policies:
       - DynamoDBCrudPolicy:
           TableName:
-            Ref: SampleTable
+            Ref: CharterEvents
       Environment:
         Variables:
           SAMPLE_TABLE:
-            Ref: SampleTable
+            Ref: CharterEvents
       Events:
         Api:
           Type: Api
@@ -92,7 +35,7 @@ Resources:
       CodeUri: putItemFunction
     Metadata:
       SamResourceId: putItemFunction
-  SampleTable:
+  CharterEvents:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
