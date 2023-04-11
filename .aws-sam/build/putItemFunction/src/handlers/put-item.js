@@ -26,14 +26,14 @@ exports.putItemHandler = async (event) => {
     const id = body.booking.pk;
     const start = body.booking.availability.start_at;
     const end = body.booking.availability.end_at;
+    const item = body.booking.availability.item.name;
+    const itemId = body.booking.availability.item.pk;
+    const status = body.booking.status;
     const booking = body.booking;
 
-    const pk = id.toString();
+    console.log(body, id, start, end, item, itemId, status, booking);
 
-    console.info('id: ', pk);
-    console.info('start: ', start);
-    console.info('end: ', end);
-    console.info('booking: ', booking);
+    const pk = id.toString();
 
     // Creates a new item, or replaces an old item with a new item
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
@@ -42,7 +42,7 @@ exports.putItemHandler = async (event) => {
     try {
         const params = {
             TableName : tableName,
-            Item: { id : pk, start: start, end: end, booking: booking }
+            Item: { id : pk, start: start, end: end, item: item, item_id: itemId, status: status, booking: booking }
         };
     
         const result = await docClient.put(params).promise();
