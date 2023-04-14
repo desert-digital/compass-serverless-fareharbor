@@ -32,57 +32,29 @@ Resources:
       Handler: src/handlers/put-item.putItemHandler
       Runtime: nodejs16.x
       Architectures:
-      - x86_64
       MemorySize: 128
       Timeout: 100
       Description: Fareharbor events table.
       Policies:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
-      - DynamoDBCrudPolicy:
-          TableName: !Ref CharterEvents
+        - Version: '2012-10-17'
+          Statement: 
+          - Effect: Allow
+            Action: 
+            - 'dynamodb:*'
+            Resource: 
+            - '*'
       Environment:
         Variables:
           # Make table name accessible as environment variable from function code during execution
-          SAMPLE_TABLE: !Ref CharterEvents
+          EVENT_TABLE: "Event-3skh26yrxrew7crt3wobcd2w3q-dev"
       Events:
         Api:
           Type: Api
           Properties:
             Path: /
             Method: POST
-  # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
-  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
-
-  CharterEvents:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: id
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
-
-  ApplicationResourceGroup:
-    Type: AWS::ResourceGroups::Group
-    Properties:
-      Name:
-        Fn::Join:
-        - ''
-        - - ApplicationInsights-SAM-
-          - Ref: AWS::StackName
-      ResourceQuery:
-        Type: CLOUDFORMATION_STACK_1_0
-  ApplicationInsightsMonitoring:
-    Type: AWS::ApplicationInsights::Application
-    Properties:
-      ResourceGroupName:
-        Fn::Join:
-        - ''
-        - - ApplicationInsights-SAM-
-          - Ref: AWS::StackName
-      AutoConfigurationEnabled: 'true'
-    DependsOn: ApplicationResourceGroup
+            
 Outputs:
   WebEndpoint:
     Description: API Gateway endpoint URL for Prod stage

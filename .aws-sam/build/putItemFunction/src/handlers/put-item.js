@@ -4,7 +4,7 @@
 const AWS = require('aws-sdk');
 
 // Get the DynamoDB table name from environment variables
-const tableName = process.env.SAMPLE_TABLE;
+const tableName = process.env.EVENT_TABLE;
 
 /**
  * A simple example includes a HTTP post method to add one item to a DynamoDB table.
@@ -23,6 +23,7 @@ exports.putItemHandler = async (event) => {
 
     // Get id and name from the body of the request
     const body = JSON.parse(event.body);
+
     const id = body.booking.pk;
     const start = body.booking.availability.start_at;
     const end = body.booking.availability.end_at;
@@ -31,12 +32,8 @@ exports.putItemHandler = async (event) => {
     const status = body.booking.status;
     const booking = body.booking;
 
-    console.log(body, id, start, end, item, itemId, status, booking);
-
     const pk = id.toString();
 
-    // Creates a new item, or replaces an old item with a new item
-    // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
     let response = {};
 
     try {
