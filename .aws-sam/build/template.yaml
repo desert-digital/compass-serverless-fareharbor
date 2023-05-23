@@ -27,7 +27,7 @@ Resources:
           - '*'
       Environment:
         Variables:
-          EVENT_TABLE: Event-3skh26yrxrew7crt3wobcd2w3q-dev
+          EVENT_TABLE: Event-alnddzqosfaspjyrtpxu32f6cm-dev
       Events:
         Api:
           Type: Api
