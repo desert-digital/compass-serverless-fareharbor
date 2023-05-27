@@ -12,7 +12,7 @@ const tableName = process.env.EVENT_TABLE;
 exports.putItemHandler = async (event) => {
     console.info('New version');
 
-    AWS.config.update({region: 'us-west-1'});
+    AWS.config.update({ region: 'us-west-1' });
     const docClient = new AWS.DynamoDB.DocumentClient();
 
 
@@ -25,6 +25,8 @@ exports.putItemHandler = async (event) => {
     const body = JSON.parse(event.body);
 
     const id = body.booking.pk;
+    const createdAt = new Date().toISOString();
+    const updatedAt = new Date().toISOString();
     const start = body.booking.availability.start_at;
     const end = body.booking.availability.end_at;
     const item = body.booking.availability.item.name;
@@ -38,12 +40,12 @@ exports.putItemHandler = async (event) => {
 
     try {
         const params = {
-            TableName : tableName,
-            Item: { id : pk, start: start, end: end, item: item, item_id: itemId, status: status, booking: booking }
+            TableName: tableName,
+            Item: { id: pk, start: start, end: end, item: item, item_id: itemId, status: status, booking: booking, createdAt: createdAt, updatedAt: updatedAt }
         };
-    
+
         const result = await docClient.put(params).promise();
-    
+
         response = {
             statusCode: 200,
             body: JSON.stringify(body)

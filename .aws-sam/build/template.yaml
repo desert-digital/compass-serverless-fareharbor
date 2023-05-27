@@ -27,7 +27,7 @@ Resources:
           - '*'
       Environment:
         Variables:
-          EVENT_TABLE: Event-alnddzqosfaspjyrtpxu32f6cm-dev
+          EVENT_TABLE: PendingEvent-alnddzqosfaspjyrtpxu32f6cm-dev
       Events:
         Api:
           Type: Api
