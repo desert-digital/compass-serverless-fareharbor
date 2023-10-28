@@ -41,7 +41,7 @@ exports.putItemHandler = async (event) => {
     try {
         const params = {
             TableName: tableName,
-            Item: { id: pk, start: start, end: end, item: item, item_id: itemId, status: status, booking: booking, createdAt: createdAt, updatedAt: updatedAt }
+            Item: { id: pk, company: 'SEAFORTH', start: start, end: end, item: item, item_id: itemId, status: status, booking: booking, createdAt: createdAt, updatedAt: updatedAt }
         };
 
         const result = await docClient.put(params).promise();
