@@ -32,7 +32,9 @@ exports.putItemHandler = async (event) => {
     const item = body.booking.availability.item.name;
     const itemId = body.booking.availability.item.pk;
     const status = body.booking.status;
-    const booking = body.booking;
+    // const booking = body.booking;
+    const company = body.booking.company.shortname;
+    const contact = body.booking.contact;
 
     const pk = id.toString();
 
@@ -41,7 +43,20 @@ exports.putItemHandler = async (event) => {
     try {
         const params = {
             TableName: tableName,
-            Item: { id: pk, company: 'SEAFORTH', start: start, end: end, item: item, item_id: itemId, status: status, booking: booking, createdAt: createdAt, updatedAt: updatedAt }
+            Item: { 
+                id: pk, 
+                company: company, 
+                start: start, 
+                end: end, 
+                item: item, 
+                item_id: itemId, 
+                status: status, 
+                contactEmail: contact.email, 
+                contactName: contact.name,
+                contactPhone: contact.normalized_phone,
+                createdAt: createdAt, 
+                updatedAt: updatedAt 
+            }
         };
 
         const result = await docClient.put(params).promise();
